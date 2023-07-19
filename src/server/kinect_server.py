@@ -11,8 +11,6 @@ class KinectServer(Server):
         super().__init__(PORT)
         self.imu   = None
         self.depth = None
-        self.acc_xyz  = None
-        self.gyro_xyz = None
         self.intrinsic = None
 
     def recv_udp(self):
@@ -46,8 +44,6 @@ class KinectServer(Server):
                 cam_info = seg[6].split(b'info')
                 self.intrinsic = np.frombuffer(cam_info[0], dtype=np.float64)
                 self.imu = pickle.loads(cam_info[1])
-                self.acc_xyz = self.imu[0]
-                self.gyro_xyz = self.imu[1]
 
                 # if want to show IMU
                 '''
