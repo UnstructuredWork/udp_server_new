@@ -11,9 +11,9 @@ class KinectServer(Server):
         super().__init__(PORT)
         self.imu   = None
         self.depth = None
-
         self.acc_xyz  = None
         self.gyro_xyz = None
+        self.intrinsic = None
 
     def recv_udp(self):
         seg, addr = self.sock.recvfrom(self.MAX_DGRAM)
@@ -31,7 +31,21 @@ class KinectServer(Server):
                 print("corrupted image has been deleted")
             else:
                 self.all_data = self.all_data.split(b'frame')
-                self.imu = pickle.loads(seg[6])
+                self.rgb = self.decomp.decode(self.all_data[0])
+                self.depth = cv2.imdecode(np.asarray(bytearray(self.all_data[1]), dtype=np.uint8),
+                                          cv2.IMREAD_UNCHANGED)
+                self.server_get_img_time = datetime.now().time().isoformat()
+                self.get_fps()
+                self.get_mean_fps()
+
+                self.get_latency()
+                self.get_mean_latency()
+
+                self.show()
+
+                cam_info = seg[6].split(b'info')
+                self.intrinsic = np.frombuffer(cam_info[0], dtype=np.float64)
+                self.imu = pickle.loads(cam_info[1])
                 self.acc_xyz = self.imu[0]
                 self.gyro_xyz = self.imu[1]
 
@@ -47,18 +61,6 @@ class KinectServer(Server):
                 print('=' * 70)
                 print()
                 '''
-
-                self.rgb = self.decomp.decode(self.all_data[0])
-                self.depth = cv2.imdecode(np.asarray(bytearray(self.all_data[1]), dtype=np.uint8),
-                                          cv2.IMREAD_UNCHANGED)
-                self.server_get_img_time = datetime.now().time().isoformat()
-                self.get_fps()
-                self.get_mean_fps()
-
-                self.get_latency()
-                self.get_mean_latency()
-
-                self.show()
 
                 # self.depth = cv2.applyColorMap(self.depth.astype(np.uint8), cv2.COLORMAP_JET)
                 if self.VIS:
