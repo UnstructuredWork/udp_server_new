@@ -45,20 +45,8 @@ class KinectServer(Server):
                 self.intrinsic = np.frombuffer(cam_info[0], dtype=np.float64)
                 self.imu = pickle.loads(cam_info[1])
 
-                # if want to show IMU
-                '''
-                print('IMU Results: ')
-                print('=' * 70)
-                print('Accelerometers:')
-                print(self.acc_xyz)
-                print()
-                print('Gyros:')
-                print(self.gyro_xyz)
-                print('=' * 70)
-                print()
-                '''
-
                 # self.depth = cv2.applyColorMap(self.depth.astype(np.uint8), cv2.COLORMAP_JET)
+
                 if self.VIS:
                     cv2.imshow(str(self.PORT) + '_color', self.rgb)
                     cv2.imshow(str(self.PORT) + '_depth', self.depth)
