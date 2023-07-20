@@ -42,7 +42,7 @@ class KinectServer(Server):
                 self.show()
 
                 cam_info = seg[6].split(b'info')
-                self.intrinsic = np.frombuffer(cam_info[0], dtype=np.float64)
+                self.intrinsic = np.reshape(np.frombuffer(cam_info[0], dtype=np.float64), (3, 3))
                 self.imu = pickle.loads(cam_info[1])
 
                 # self.depth = cv2.applyColorMap(self.depth.astype(np.uint8), cv2.COLORMAP_JET)
