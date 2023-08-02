@@ -79,11 +79,8 @@ class DeticServer(Server):
                         cv2.rectangle(vmask, bbox[:2], bbox[2:], colors[i], 3)
                         cv2.putText(vmask, labels[i], (bbox[0], bbox[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, colors[i])
 
-                        try:
-                            if ids[0] != 0:
-                                cv2.putText(vmask, str(ids[i]), (bbox[0], bbox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, colors[i])
-                        except IndexError:
-                            pass
+                        if ids[0] != 0:
+                            cv2.putText(vmask, str(ids[i]), (bbox[0], bbox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, colors[i])
 
                         vmask[mask == cls] = color
 
