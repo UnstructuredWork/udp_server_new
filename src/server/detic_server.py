@@ -81,9 +81,7 @@ class DeticServer(Server):
                         if ids[0] != 0:
                             cv2.putText(vmask, str(ids[i]), (bbox[0], bbox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, colors[i])
 
-                        vmask[:, :, 0] = np.where(mask == cls, color[0], vmask[:, :, 0])
-                        vmask[:, :, 1] = np.where(mask == cls, color[1], vmask[:, :, 1])
-                        vmask[:, :, 2] = np.where(mask == cls, color[2], vmask[:, :, 2])
+                        vmask[mask == cls] = color
 
                     cv2.imshow('detic', cv2.resize(vmask, [960, 540]))
                     cv2.waitKey(1)
