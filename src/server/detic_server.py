@@ -11,6 +11,29 @@ class DeticServer(Server):
     def __init__(self, PORT):
         super().__init__(PORT)
 
+        self.categories = [
+            {"color": [0, 0, 0], "name": "_background_", "id": 0},
+            {"color": [100, 0, 255], "name": "person", "id": 1},
+            {"color": [255, 150, 150], "name": "circular_valve", "id": 2},
+            {"color": [200, 255, 0], "name": "control_box", "id": 3},
+            {"color": [255, 150, 0], "name": "emergency_stop_switch", "id": 4},
+            {"color": [255, 0, 0], "name": "fire_extinguisher", "id": 5},
+            {"color": [255, 0, 255], "name": "fire_extinguisher_box", "id": 6},
+            {"color": [255, 255, 0], "name": "fire_hydrant", "id": 7},
+            {"color": [0, 100, 255], "name": "manometer", "id": 8},
+            {"color": [0, 255, 255], "name": "safety_sign", "id": 9},
+            {"color": [0, 255, 0], "name": "starting_switch", "id": 10},
+            {"color": [0, 0, 255], "name": "straight_valve", "id": 11},
+            {"color": [255, 255, 255], "name": "warning_light", "id": 12},
+        ]
+
+        self.cat_colors = []
+        self.cat_names = []
+
+        for class_info in self.categories:
+            self.cat_colors.append(class_info["color"])
+            self.cat_names.append(class_info["name"])
+
     def recv_udp(self):
         seg, addr = self.sock.recvfrom(self.MAX_DGRAM)
         seg = seg.split(b'end')
@@ -38,33 +61,29 @@ class DeticServer(Server):
                 self.show()
 
                 classes = result[0]
-                bboxes = result[1]
-                mask = result[2]
-
-                # if want to show detection info
-                '''
-                print('Detection Results: ')
-                print('=' * 70)
-
-                for i in range(len(classes)):
-                    print('Class ' + str(i+1) + ': ' + str(classes[i]))
-                    print('  - Bounding Box: ' + str(bboxes[i]))
-                    print()
-
-                print('Mask:')
-                print(mask)
-                print('=' * 70)
-                print()
-                '''
+                ids     = result[1]
+                bboxes  = result[2]
+                mask    = result[3]
 
                 if self.VIS:
-                    vmask = mask.astype(np.uint8)
-                    vmask = cv2.applyColorMap(vmask, cv2.COLORMAP_JET)
-                    for bbox in bboxes:
-                        bbox[0::2] *= 540
-                        bbox[1::2] *= 360
+                    colors = [self.cat_colors[i] for i in classes]
+                    labels = [self.cat_names[i] for i in classes]
+
+                    vmask = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=np.uint8)
+
+                    for i, (cls, bbox, color) in enumerate((zip(classes, bboxes, colors))):
+                        bbox[0::2] *= mask.shape[1]
+                        bbox[1::2] *= mask.shape[0]
                         bbox = bbox.astype(int)
-                        vmask = cv2.rectangle(vmask, bbox[:2], bbox[2:], (0, 0, 255), 3)
+
+                        cv2.rectangle(vmask, bbox[:2], bbox[2:], colors[i], 3)
+                        cv2.putText(vmask, labels[i], (bbox[0], bbox[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, colors[i])
+
+                        if ids[0] != 0:
+                            cv2.putText(vmask, str(ids[i]), (bbox[0], bbox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                                        colors[i])
+
+                        vmask[mask == cls] = color
 
                     cv2.imshow('detic', cv2.resize(vmask, [960, 540]))
                     cv2.waitKey(1)

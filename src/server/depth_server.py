@@ -8,6 +8,7 @@ from datetime import datetime
 class DepthServer(Server):
     def __init__(self, PORT):
         super().__init__(PORT)
+
         self.depth = None
 
     def recv_udp(self):
