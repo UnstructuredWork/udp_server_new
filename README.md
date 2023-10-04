@@ -11,7 +11,7 @@
 
     $ conda create -n UDP python=3.7
     $ conda activate UDP
-    $ pip install opencv-python==4.6.0.66 opencv-contrib-python==4.6.0.66 numpy pyudev pyyaml ntplib pynvjpeg
+    $ pip install opencv-python==4.6.0.66 opencv-contrib-python==4.6.0.66 numpy pyudev pyyaml ntplib pynvjpeg fvcore
   
   #### 1_1) Ubuntu : 
     $ sudo apt-get update
