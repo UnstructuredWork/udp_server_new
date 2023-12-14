@@ -31,10 +31,12 @@
 
   ### 4) Synchronize time
   ##### [doc/time_synchronization.pptx](doc/time_synchronization.pptx)
-
+  ##### Run as administrator
+    $ python window_ntp_server.py -f -e -c -r 
+    
   ### 5) Check time synchronization 
   ##### use only on Ubuntu
-    > python test/sync.py
+    $ python test/sync.py
     ------------------------
       NTP Server Time과 Local Time과 차이는 -1.36 ms입니다.
       NTP Server Time과 Local Time과 차이는 -1.45 ms입니다.
@@ -42,7 +44,7 @@
       NTP Server Time과 Local Time과 차이는 -1.40 ms입니다.
       NTP Server Time과 Local Time과 차이는 -1.37 ms입니다.
     
-    > chronyc sources -v
+    $ chronyc sources -v
     ------------------------
     210 Number of sources = 1
     
