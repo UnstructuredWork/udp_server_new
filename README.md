@@ -11,7 +11,7 @@
 
     $ conda create -n UDP python=3.7
     $ conda activate UDP
-    $ pip install opencv-python==4.6.0.66 opencv-contrib-python==4.6.0.66 numpy pyudev pyyaml ntplib pynvjpeg
+    $ pip install opencv-python==4.6.0.66 opencv-contrib-python==4.6.0.66 numpy pyudev pyyaml ntplib pynvjpeg fvcore
   
   #### 1_1) Ubuntu : 
     $ sudo apt-get update
@@ -25,16 +25,14 @@
   ### 2) Download git:
     $ git clone https://github.com/UnstructuredWork/udp_server.git
 
-  ### 3) Run
-  ##### modify 'HOST' and 'PORT' before using
-    $ python main.py
-
-  ### 4) Synchronize time
+  ### 3) Synchronize time
   ##### [doc/time_synchronization.pptx](doc/time_synchronization.pptx)
-
-  ### 5) Check time synchronization 
+  ##### Run as administrator
+    $ python window_ntp_server.py -f -e -c -r 
+    
+  ### 4) Check time synchronization 
   ##### use only on Ubuntu
-    > python test/sync.py
+    $ python test/sync.py
     ------------------------
       NTP Server Time과 Local Time과 차이는 -1.36 ms입니다.
       NTP Server Time과 Local Time과 차이는 -1.45 ms입니다.
@@ -42,7 +40,7 @@
       NTP Server Time과 Local Time과 차이는 -1.40 ms입니다.
       NTP Server Time과 Local Time과 차이는 -1.37 ms입니다.
     
-    > chronyc sources -v
+    $ chronyc sources -v
     ------------------------
     210 Number of sources = 1
     
@@ -57,3 +55,9 @@
     MS Name/IP address         Stratum Poll Reach LastRx Last sample               
     ===============================================================================
     ^* 10.252.101.174                4  10     0   66h    +18us[  +16us] +/- 8647ms
+    
+  ### 5) Run
+  ##### modify 'HOST' and 'PORT' before using
+    $ python main.py
+
+  
