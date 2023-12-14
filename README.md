@@ -25,16 +25,12 @@
   ### 2) Download git:
     $ git clone https://github.com/UnstructuredWork/udp_server.git
 
-  ### 3) Run
-  ##### modify 'HOST' and 'PORT' before using
-    $ python main.py
-
-  ### 4) Synchronize time
+  ### 3) Synchronize time
   ##### [doc/time_synchronization.pptx](doc/time_synchronization.pptx)
   ##### Run as administrator
     $ python window_ntp_server.py -f -e -c -r 
     
-  ### 5) Check time synchronization 
+  ### 4) Check time synchronization 
   ##### use only on Ubuntu
     $ python test/sync.py
     ------------------------
@@ -59,3 +55,9 @@
     MS Name/IP address         Stratum Poll Reach LastRx Last sample               
     ===============================================================================
     ^* 10.252.101.174                4  10     0   66h    +18us[  +16us] +/- 8647ms
+    
+  ### 5) Run
+  ##### modify 'HOST' and 'PORT' before using
+    $ python main.py
+
+  
